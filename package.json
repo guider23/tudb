@@ -1,0 +1,52 @@
+{
+  "name": "tudb",
+  "version": "1.0.0",
+  "description": "Talk to Your Database - Natural Language to SQL Agent with Multi-Database Support",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "admin-dashboard",
+    "mcp-tool-server"
+  ],
+  "scripts": {
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:dashboard": "npm run dev --workspace=admin-dashboard",
+    "dev:mcp": "npm run dev --workspace=mcp-tool-server",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:dashboard\" --names \"backend,dashboard\" --prefix-colors \"blue,magenta\"",
+    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:dashboard\" \"npm run dev:mcp\" --names \"backend,dashboard,mcp\" --prefix-colors \"blue,magenta,green\"",
+    "build": "tsc && npm run build --workspaces",
+    "start": "node dist/backend/src/index.js",
+    "start:frontend": "npm start --workspace=admin-dashboard",
+    "heroku-postbuild": "npm run build",
+    "test": "npm run test --workspaces",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"**/*.{ts,json,md}\"",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "db:migrate": "node database/migrate.js",
+    "db:seed": "node database/seed.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.54.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mysql2": "^3.15.3"
+  }
+}

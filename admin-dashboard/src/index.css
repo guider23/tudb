@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-[#F5F5F7] text-neutral-900 m-0 min-h-screen;
+  }
+
+  * {
+    @apply border-neutral-200;
+  }
+}
+
+@layer components {
+  /* Card Component */
+  .card {
+    @apply bg-white rounded-xl border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-200;
+  }
+
+  /* Button Primary */
+  .btn-primary {
+    @apply px-4 py-2.5 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 active:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150;
+  }
+
+  /* Button Secondary */
+  .btn-secondary {
+    @apply px-4 py-2.5 bg-white text-neutral-700 text-sm font-medium rounded-lg border border-neutral-300 hover:bg-neutral-50 active:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150;
+  }
+
+  /* Button Ghost */
+  .btn-ghost {
+    @apply px-4 py-2.5 bg-transparent text-neutral-700 text-sm font-medium rounded-lg hover:bg-neutral-100 active:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150;
+  }
+
+  /* Button Danger */
+  .btn-danger {
+    @apply px-4 py-2.5 bg-error-600 text-white text-sm font-medium rounded-lg hover:bg-error-700 active:bg-error-800 focus:outline-none focus:ring-2 focus:ring-error-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150;
+  }
+
+  /* Input Field */
+  .input {
+    @apply w-full px-3 py-2.5 bg-white border border-neutral-300 rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent disabled:bg-neutral-100 disabled:cursor-not-allowed transition-all duration-150;
+  }
+
+  /* Select Field */
+  .select {
+    @apply w-full px-3 py-2.5 bg-white border border-neutral-300 rounded-lg text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent disabled:bg-neutral-100 disabled:cursor-not-allowed transition-all duration-150;
+  }
+
+  /* Label */
+  .label {
+    @apply block text-xs font-semibold text-neutral-700 mb-1.5 uppercase tracking-wide;
+  }
+
+  /* Badge Success */
+  .badge-success {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 bg-success-50 text-success-700 text-xs font-medium rounded-md;
+  }
+
+  /* Badge Warning */
+  .badge-warning {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 bg-warning-50 text-warning-700 text-xs font-medium rounded-md;
+  }
+
+  /* Badge Error */
+  .badge-error {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 bg-error-50 text-error-700 text-xs font-medium rounded-md;
+  }
+
+  /* Badge Info */
+  .badge-info {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 bg-info-50 text-info-700 text-xs font-medium rounded-md;
+  }
+
+  /* Badge Neutral */
+  .badge-neutral {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 bg-neutral-100 text-neutral-700 text-xs font-medium rounded-md;
+  }
+
+  /* Stat Card */
+  .stat-card {
+    @apply card p-6;
+  }
+
+  /* Page Header */
+  .page-header {
+    @apply bg-white border-b border-neutral-200 px-8 py-6;
+  }
+
+  /* Page Title */
+  .page-title {
+    @apply text-2xl font-semibold text-neutral-900;
+  }
+
+  /* Page Subtitle */
+  .page-subtitle {
+    @apply text-sm text-neutral-600 mt-1;
+  }
+
+  /* Section Title */
+  .section-title {
+    @apply text-lg font-semibold text-neutral-900 mb-4;
+  }
+
+  /* ========== macOS Big Sur/Monterey Design System ========== */
+  
+  /* Glassmorphic Cards */
+  .macos-card {
+    @apply bg-white/95 rounded-2xl border border-black/[0.08] shadow-[0_8px_24px_rgba(0,0,0,0.12)] backdrop-blur-xl transition-all duration-200;
+  }
+
+  .macos-card-hover {
+    @apply macos-card p-6 hover:shadow-[0_12px_32px_rgba(0,0,0,0.16)] hover:-translate-y-0.5 cursor-pointer;
+  }
+
+  .macos-glass-card {
+    @apply bg-white/90 rounded-[20px] border border-black/[0.06] shadow-[0_8px_24px_rgba(0,0,0,0.1)] backdrop-blur-2xl p-8 transition-all duration-300;
+  }
+
+  /* Typography - SF Pro inspired */
+  .macos-title {
+    @apply text-[32px] font-bold text-[#111111] tracking-tight leading-tight;
+  }
+
+  .macos-subtitle {
+    @apply text-[15px] text-[#86868B] font-medium tracking-normal;
+  }
+
+  .macos-section-title {
+    @apply text-[22px] font-semibold text-[#111111] tracking-tight;
+  }
+
+  .macos-label {
+    @apply text-[13px] font-medium text-[#86868B] tracking-normal;
+  }
+
+  .macos-caption {
+    @apply text-[12px] text-[#86868B] font-medium;
+  }
+
+  /* Pill Buttons - macOS Style */
+  .macos-btn-primary {
+    @apply px-6 py-2.5 bg-[#007AFF] text-white rounded-[22px] text-[14px] font-semibold hover:bg-[#0051D5] focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30 focus:ring-offset-2 transition-all duration-200 shadow-[0_2px_8px_rgba(0,122,255,0.25)] hover:shadow-[0_4px_12px_rgba(0,122,255,0.35)] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .macos-btn-secondary {
+    @apply px-6 py-2.5 bg-white/90 text-[#111111] border border-black/[0.08] rounded-[22px] text-[14px] font-semibold hover:bg-[#F5F5F7] focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:ring-offset-2 transition-all duration-200 backdrop-blur-xl disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .macos-btn-ghost {
+    @apply px-6 py-2.5 text-[#111111]/85 rounded-[22px] text-[14px] font-semibold hover:bg-black/[0.05] focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .macos-btn-danger {
+    @apply px-6 py-2.5 bg-[#FF3B30] text-white rounded-[22px] text-[14px] font-semibold hover:bg-[#D70015] focus:outline-none focus:ring-2 focus:ring-[#FF3B30]/30 focus:ring-offset-2 transition-all duration-200 shadow-[0_2px_8px_rgba(255,59,48,0.25)] hover:shadow-[0_4px_12px_rgba(255,59,48,0.35)] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Pill Badges - macOS Style */
+  .macos-badge-pill {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide transition-all duration-150;
+  }
+
+  /* List Items - macOS Style */
+  .macos-list-item {
+    @apply flex items-center gap-3 p-4 rounded-xl bg-white/60 border border-black/[0.04] hover:bg-white/80 hover:border-black/[0.06] transition-all duration-150 backdrop-blur-sm;
+  }
+}
+
+/* Keyframe Animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
