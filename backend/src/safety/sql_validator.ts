@@ -129,6 +129,28 @@ export class SQLValidator {
       // Allow but log warning
     }
 
+    // Validate UNION queries
+    const unionValidation = this.validateUnionQuery(normalizedSQL);
+    if (!unionValidation.isValid) {
+      return unionValidation;
+    }
+
+    return { isValid: true, isDestructive: false };
+  }
+
+  private validateUnionQuery(sql: string): ValidationResult {
+    // Check if query contains UNION, UNION ALL, INTERSECT, or EXCEPT
+    const hasSetOperation = /\b(UNION|INTERSECT|EXCEPT)\b/i.test(sql);
+    
+    if (!hasSetOperation) {
+      return { isValid: true, isDestructive: false };
+    }
+
+    // Just log a warning - let the database validate column counts
+    // The AI prompt should prevent incorrect UNION queries
+    logger.warn('UNION query detected - database will validate column counts');
+    
+    // Allow the query to proceed - database will return proper error if columns don't match
     return { isValid: true, isDestructive: false };
   }
 

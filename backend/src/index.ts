@@ -24,6 +24,7 @@ import rateLimit from 'express-rate-limit';
 import { queryRouter } from './routes/query';
 import adminRouter from './routes/admin';
 import agentRouter from './routes/agent';
+import inspectRouter from './routes/inspect';
 import { createLogger } from './logger';
 import { DatabaseRouter } from '../../db/db_router';
 import { clerkAuth, requireAuthentication, extractUserId } from './middleware/clerk-auth';
@@ -137,9 +138,10 @@ app.get('/api/admin/shared/:token', async (req: Request, res: Response) => {
 app.use('/api/query', requireAuthentication, extractUserId, queryRouter);
 app.use('/api/admin', requireAuthentication, extractUserId, adminRouter);
 app.use('/api/admin', requireAuthentication, extractUserId, agentRouter);
+app.use('/api/inspect', requireAuthentication, extractUserId, inspectRouter);
 
 // Serve static files from admin-dashboard build
-// On Heroku, files are in /app, so admin-dashboard/dist is at /app/admin-dashboard/dist
+// When compiled: __dirname = /app/backend/dist, so we need ../../../admin-dashboard/dist to get to /app/admin-dashboard/dist
 const dashboardPath = path.resolve(__dirname, '../../../admin-dashboard/dist');
 logger.info(`Serving static files from: ${dashboardPath}`);
 app.use(express.static(dashboardPath));

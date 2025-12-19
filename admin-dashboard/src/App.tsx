@@ -10,6 +10,7 @@ import QueryInterface from './pages/QueryInterface';
 import Settings from './pages/Settings';
 import SavedQueries from './pages/SavedQueries';
 import SetupGuide from './pages/SetupGuide';
+import Inspect from './pages/Inspect';
 import SignInPage from './pages/SignIn';
 import SignUpPage from './pages/SignUp';
 import SharedQuery from './pages/SharedQuery';
@@ -135,6 +136,7 @@ function App() {
             <Route path="connections" element={<Connections />} />
             <Route path="query" element={<QueryInterface />} />
             <Route path="saved-queries" element={<SavedQueries />} />
+            <Route path="inspect" element={<Inspect />} />
             <Route path="settings" element={<Settings />} />
             <Route path="setup-guide" element={<SetupGuide />} />
           </Route>

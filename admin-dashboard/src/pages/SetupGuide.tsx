@@ -1,437 +1,538 @@
 import { useState } from 'react';
-import { ChevronRight, Copy, Check, ExternalLink, AlertCircle, Shield, Database, Server } from 'lucide-react';
+import { Copy, Check, ExternalLink } from 'lucide-react';
 
 export default function SetupGuide() {
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [copiedText, setCopiedText] = useState<string>('');
+  const [selectedProvider, setSelectedProvider] = useState<string>('supabase');
 
-  const handleCopy = (text: string, index: number) => {
+  const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
+    setCopiedText(text);
+    setTimeout(() => setCopiedText(''), 2000);
   };
 
-  const databases = [
+  const providers = [
     {
-      name: 'PostgreSQL (Local)',
-      logo: 'https://www.postgresql.org/media/img/about/press/elephant.png',
-      color: 'blue',
-      gradient: 'from-blue-50 to-blue-100',
-      description: 'Open-source relational database for local development',
-      connectionString: 'postgresql://username:password@localhost:5432/database',
-      examples: [
-        {
-          title: 'Local Development',
-          string: 'postgresql://postgres:password@localhost:5432/myapp'
-        }
-      ],
-      setup: [
-        {
-          step: 'Install PostgreSQL',
-          description: 'Download from postgresql.org or use package manager',
-          commands: [
-            '# macOS\nbrew install postgresql@16',
-            '# Windows\nDownload installer from postgresql.org',
-            '# Linux (Ubuntu)\nsudo apt-get update\nsudo apt-get install postgresql-16'
-          ]
-        },
-        {
-          step: 'Start PostgreSQL Service',
-          description: 'Ensure PostgreSQL is running on your system',
-          commands: [
-            '# macOS\nbrew services start postgresql@16',
-            '# Linux\nsudo service postgresql start',
-            '# Windows\nRun: Services > PostgreSQL'
-          ]
-        },
-        {
-          step: 'Create Database',
-          description: 'Create a new database for your application',
-          commands: [
-            'psql -U postgres\nCREATE DATABASE myapp;\n\\q'
-          ]
-        }
-      ],
-      tips: [
-        'Default port is 5432',
-        'Use strong passwords for production',
-        'Create read-only users for query interfaces'
-      ]
-    },
-    {
-      name: 'MySQL',
-      logo: 'https://labs.mysql.com/common/logos/mysql-logo.svg',
-      color: 'blue',
-      gradient: 'from-blue-50 to-blue-100',
-      description: 'Popular open-source relational database management system',
-      connectionString: 'mysql://username:password@localhost:3306/database',
-      examples: [
-        {
-          title: 'Local MySQL',
-          string: 'mysql://root:password@localhost:3306/myapp'
-        },
-        {
-          title: 'Remote MySQL',
-          string: 'mysql://user:pass@mysql-server.example.com:3306/production'
-        }
-      ],
-      setup: [
-        {
-          step: 'Install MySQL',
-          description: 'Download from mysql.com or use package manager',
-          commands: [
-            '# macOS\nbrew install mysql',
-            '# Windows\nDownload installer from mysql.com',
-            '# Linux (Ubuntu)\nsudo apt-get update\nsudo apt-get install mysql-server'
-          ]
-        },
-        {
-          step: 'Start MySQL Service',
-          description: 'Ensure MySQL is running on your system',
-          commands: [
-            '# macOS\nbrew services start mysql',
-            '# Linux\nsudo service mysql start',
-            '# Windows\nRun: Services > MySQL'
-          ]
-        },
-        {
-          step: 'Secure Installation',
-          description: 'Run the security script to set root password',
-          commands: [
-            'mysql_secure_installation'
-          ]
-        },
-        {
-          step: 'Create Database',
-          description: 'Create a new database for your application',
-          commands: [
-            'mysql -u root -p\nCREATE DATABASE myapp;\nCREATE USER \'appuser\'@\'localhost\' IDENTIFIED BY \'password\';\nGRANT ALL PRIVILEGES ON myapp.* TO \'appuser\'@\'localhost\';\nFLUSH PRIVILEGES;\nexit;'
-          ]
-        }
-      ],
-      tips: [
-        'Default port is 3306',
-        'Use strong passwords for all users',
-        'Consider using SSL for remote connections',
-        'Enable binary logging for replication'
-      ]
-    },
-    {
+      id: 'supabase',
       name: 'Supabase',
-      logo: 'data:image/svg+xml,%3Csvg width="109" height="113" viewBox="0 0 109 113" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(%23paint0_linear)"/%3E%3Cpath d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(%23paint1_linear)" fill-opacity="0.2"/%3E%3Cpath d="M45.317 2.07103C48.1765 -1.53037 53.9745 0.442937 54.0434 5.041L54.4849 72.2922H9.83113C1.64038 72.2922 -2.92775 62.8321 2.1655 56.4175L45.317 2.07103Z" fill="%233ECF8E"/%3E%3Cdefs%3E%3ClinearGradient id="paint0_linear" x1="53.9738" y1="54.974" x2="94.1635" y2="71.8295" gradientUnits="userSpaceOnUse"%3E%3Cstop stop-color="%23249361"/%3E%3Cstop offset="1" stop-color="%233ECF8E"/%3E%3C/linearGradient%3E%3ClinearGradient id="paint1_linear" x1="36.1558" y1="30.578" x2="54.4844" y2="65.0806" gradientUnits="userSpaceOnUse"%3E%3Cstop/%3E%3Cstop offset="1" stop-opacity="0"/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E',
-      color: 'green',
-      gradient: 'from-green-50 to-green-100',
-      description: 'Open source Firebase alternative with PostgreSQL',
-      connectionString: 'postgresql://postgres:[password]@db.[project].supabase.co:5432/postgres',
-      examples: [
-        {
-          title: 'Supabase Connection',
-          string: 'postgresql://postgres.ykanixtxrlnxbwxeknwb:[password]@aws-0-ap-south-1.pooler.supabase.com:5432/postgres'
-        }
+      logo: 'https://img.icons8.com/color/512/supabase.png',
+      category: 'PostgreSQL',
+      description: 'Open source Firebase alternative with PostgreSQL database',
+      websiteUrl: 'https://supabase.com',
+      docsUrl: 'https://supabase.com/docs/guides/database/connecting-to-postgres',
+      connectionFormat: 'postgresql://postgres:[YOUR-PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres',
+      exampleString: 'postgresql://postgres:your_password@db.abcdefghij.supabase.co:5432/postgres',
+      steps: [
+        { title: 'Sign up', description: 'Create account at supabase.com' },
+        { title: 'Create Project', description: 'Click "New Project" and set database password' },
+        { title: 'Get Connection String', description: 'Go to Project Settings → Database → Connection String' },
+        { title: 'Copy URI', description: 'Select "URI" mode and copy the connection string' }
       ],
-      setup: [
-        {
-          step: 'Create Project',
-          description: 'Sign up at supabase.com and create a new project',
-          commands: [
-            'Visit: https://supabase.com/dashboard\nClick: New Project'
-          ]
-        },
-        {
-          step: 'Get Connection String',
-          description: 'Navigate to Project Settings > Database',
-          commands: [
-            'Copy: Session Pooler connection string\n(Use port 5432 for IPv4 compatibility)'
-          ]
-        },
-        {
-          step: 'Configure Connection',
-          description: 'Use Session Pooler for better compatibility',
-          commands: [
-            'Format:\npostgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:5432/postgres'
-          ]
-        }
-      ],
-      tips: [
-        'Always use Session Pooler (port 5432)',
-        'Direct Connection (port 6543) may have IPv6 issues',
-        'Free tier includes 500MB database',
-        'Built-in Auth and Storage'
-      ]
+      features: ['Built-in Auth', 'Real-time subscriptions', 'Storage', 'Edge Functions'],
+      freeTier: true
     },
     {
+      id: 'neon',
       name: 'Neon',
-      logo: 'data:image/svg+xml,%3Csvg width="158" height="45" viewBox="0 0 158 45" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath fill-rule="evenodd" clip-rule="evenodd" d="M0 7.61152C0 3.40779 3.44137 0 7.68651 0H36.8952C41.1404 0 44.5817 3.40779 44.5817 7.61152V32.2111C44.5817 36.5601 39.0241 38.4476 36.3287 35.014L27.902 24.2798V37.2964C27.902 41.0798 24.8048 44.1468 20.9842 44.1468H7.68651C3.44137 44.1468 0 40.739 0 36.5353V7.61152ZM7.68651 6.08921C6.83748 6.08921 6.14921 6.77077 6.14921 7.61152V36.5353C6.14921 37.376 6.83748 38.0576 7.68651 38.0576H21.2148C21.6393 38.0576 21.7528 37.7168 21.7528 37.2964V19.8412C21.7528 15.4922 27.3104 13.6047 30.0059 17.0383L38.4325 27.7725V7.61152C38.4325 6.77077 38.5129 6.08921 37.6639 6.08921H7.68651Z" fill="%23191919"/%3E%3Cpath d="M36.8954 0C41.1406 0 44.5819 3.40779 44.5819 7.61152V32.2111C44.5819 36.5601 39.0243 38.4476 36.3289 35.014L27.9022 24.2798V37.2964C27.9022 41.0798 24.805 44.1468 20.9844 44.1468C21.4089 44.1468 21.753 43.806 21.753 43.3857V19.8412C21.753 15.4922 27.3106 13.6047 30.0061 17.0383L38.4327 27.7725V1.5223C38.4327 0.681558 37.7445 0 36.8954 0Z" fill="%23191919"/%3E%3Cpath d="M75.1561 13.0033V24.5502L63.8496 13.0033H57.9648V31.8884H63.332V19.4782L75.6465 31.8884H80.5232V13.0033H75.1561Z" fill="%231A1A1A"/%3E%3Cpath d="M90.4725 27.6797V24.3343H102.487V20.3145H90.4725V17.212H105.048V13.0033H84.9964V31.8884H105.348V27.6797H90.4725Z" fill="%231A1A1A"/%3E%3Cpath d="M119.61 32.5089C127.157 32.5089 132.061 28.8398 132.061 22.4458C132.061 16.0519 127.157 12.3828 119.61 12.3828C112.063 12.3828 107.187 16.0519 107.187 22.4458C107.187 28.8398 112.063 32.5089 119.61 32.5089ZM119.61 28.0304C115.415 28.0304 112.826 26.007 112.826 22.4458C112.826 18.8847 115.442 16.8613 119.61 16.8613C123.806 16.8613 126.394 18.8847 126.394 22.4458C126.394 26.007 123.806 28.0304 119.61 28.0304Z" fill="%231A1A1A"/%3E%3Cpath d="M152.632 13.0033V24.5502L141.326 13.0033H135.441V31.8884H140.808V19.4782L153.123 31.8884H157.999V13.0033H152.632Z" fill="%231A1A1A"/%3E%3C/svg%3E',
-      color: 'emerald',
-      gradient: 'from-emerald-50 to-emerald-100',
-      description: 'Serverless PostgreSQL with branching',
-      connectionString: 'postgresql://[user]:[password]@[endpoint].neon.tech/[dbname]',
-      examples: [
-        {
-          title: 'Neon Connection',
-          string: 'postgresql://user:password@ep-cool-darkness-123456.us-east-2.aws.neon.tech/neondb'
-        }
+      logo: 'https://neon.tech/favicon/favicon.png',
+      category: 'PostgreSQL',
+      description: 'Serverless Postgres with instant branching and autoscaling',
+      websiteUrl: 'https://neon.tech',
+      docsUrl: 'https://neon.tech/docs/connect/connect-from-any-app',
+      connectionFormat: 'postgresql://[user]:[password]@[endpoint].neon.tech/[dbname]',
+      exampleString: 'postgresql://user:password@ep-cool-darkness-123456.us-east-2.aws.neon.tech/neondb',
+      steps: [
+        { title: 'Sign up', description: 'Create account at neon.tech' },
+        { title: 'Create Project', description: 'Click "Create Project" and select region' },
+        { title: 'Connection Details', description: 'Click on your project to view connection details' },
+        { title: 'Copy Connection String', description: 'Copy the connection string from the dashboard' }
       ],
-      setup: [
-        {
-          step: 'Create Account',
-          description: 'Sign up at neon.tech',
-          commands: [
-            'Visit: https://neon.tech\nClick: Sign Up'
-          ]
-        },
-        {
-          step: 'Create Project',
-          description: 'Create a new project in your dashboard',
-          commands: [
-            'Dashboard > New Project\nSelect: Region and PostgreSQL version'
-          ]
-        },
-        {
-          step: 'Get Connection String',
-          description: 'Copy from project dashboard',
-          commands: [
-            'Dashboard > Connection Details\nCopy: Connection String'
-          ]
-        }
-      ],
-      tips: [
-        'Generous free tier with autoscaling',
-        'Database branching for dev/test',
-        'Automatic backups',
-        'Scale to zero when inactive'
-      ]
+      features: ['Serverless', 'Instant branching', 'Autoscaling', 'Time travel queries'],
+      freeTier: true
     },
     {
+      id: 'railway',
       name: 'Railway',
-      logo: 'https://railway.com/brand/logo-dark.svg',
-      color: 'purple',
-      gradient: 'from-purple-50 to-purple-100',
-      description: 'Deploy PostgreSQL with one click',
-      connectionString: 'postgresql://postgres:[password]@[host].railway.app:[port]/railway',
-      examples: [
-        {
-          title: 'Railway Connection',
-          string: 'postgresql://postgres:password@containers-us-west-12.railway.app:5432/railway'
-        }
+      logo: 'https://railway.app/brand/logo-light.png',
+      category: 'PostgreSQL',
+      description: 'Deploy databases and applications with zero configuration',
+      websiteUrl: 'https://railway.app',
+      docsUrl: 'https://docs.railway.app/databases/postgresql',
+      connectionFormat: 'postgresql://postgres:[password]@[host].railway.app:[port]/railway',
+      exampleString: 'postgresql://postgres:password@containers-us-west-123.railway.app:7654/railway',
+      steps: [
+        { title: 'Sign up', description: 'Create account at railway.app' },
+        { title: 'New Project', description: 'Click "New Project" → "Provision PostgreSQL"' },
+        { title: 'Database Tab', description: 'Click on PostgreSQL service in your project' },
+        { title: 'Copy Connection URL', description: 'Find "POSTGRES_URL" in Variables tab' }
       ],
-      setup: [
-        {
-          step: 'Create Account',
-          description: 'Sign up at railway.app with GitHub',
-          commands: [
-            'Visit: https://railway.app\nClick: Login with GitHub'
-          ]
-        },
-        {
-          step: 'Create PostgreSQL Database',
-          description: 'Add PostgreSQL to your project',
-          commands: [
-            'New Project > Add PostgreSQL\nWait for deployment'
-          ]
-        },
-        {
-          step: 'Get Connection String',
-          description: 'Available in database settings',
-          commands: [
-            'Database > Connect Tab\nCopy: Postgres Connection URL'
-          ]
-        }
-      ],
-      tips: [
-        '$5 free credit monthly',
-        'Automatic SSL connections',
-        'Built-in monitoring',
-        'Easy environment variables'
-      ]
+      features: ['One-click deploys', 'Built-in monitoring', 'Auto-scaling', 'GitHub integration'],
+      freeTier: true
     },
     {
-      name: 'AWS RDS',
-      logo: 'https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png',
-      color: 'orange',
-      gradient: 'from-orange-50 to-orange-100',
-      description: 'Managed PostgreSQL on AWS',
-      connectionString: 'postgresql://[user]:[password]@[endpoint].rds.amazonaws.com:5432/[dbname]',
-      examples: [
-        {
-          title: 'AWS RDS Connection',
-          string: 'postgresql://admin:password@mydb.c9akciq32.us-east-1.rds.amazonaws.com:5432/production'
-        }
+      id: 'rds',
+      name: 'AWS RDS PostgreSQL',
+      logo: 'https://cdn.worldvectorlogo.com/logos/aws-rds.svg',
+      category: 'PostgreSQL',
+      description: 'Managed relational database service by Amazon Web Services',
+      websiteUrl: 'https://aws.amazon.com/rds/',
+      docsUrl: 'https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html',
+      connectionFormat: 'postgresql://[username]:[password]@[endpoint]:[port]/[dbname]',
+      exampleString: 'postgresql://postgres:password@mydb.abc123.us-east-1.rds.amazonaws.com:5432/mydb',
+      steps: [
+        { title: 'AWS Console', description: 'Log in to AWS Console and go to RDS' },
+        { title: 'Create Database', description: 'Click "Create database" and select PostgreSQL' },
+        { title: 'Configure Instance', description: 'Set DB instance identifier, username, password' },
+        { title: 'Connectivity', description: 'Copy endpoint from the Connectivity section' }
       ],
-      setup: [
-        {
-          step: 'Create RDS Instance',
-          description: 'Navigate to AWS RDS console',
-          commands: [
-            'AWS Console > RDS > Create Database\nSelect: PostgreSQL\nChoose: Free tier (or production)'
-          ]
-        },
-        {
-          step: 'Configure Security Group',
-          description: 'Allow inbound connections',
-          commands: [
-            'RDS > Security Groups\nAdd Inbound Rule: PostgreSQL (5432)\nSource: Your IP or 0.0.0.0/0 (less secure)'
-          ]
-        },
-        {
-          step: 'Get Endpoint',
-          description: 'Copy endpoint from RDS details',
-          commands: [
-            'RDS > Databases > [Your DB]\nCopy: Endpoint & Port'
-          ]
-        }
+      features: ['High availability', 'Automated backups', 'Read replicas', 'Multi-AZ deployment'],
+      freeTier: true
+    },
+    {
+      id: 'herokupostgres',
+      name: 'Heroku Postgres',
+      logo: 'https://cdn.worldvectorlogo.com/logos/heroku-1.svg',
+      category: 'PostgreSQL',
+      description: 'Reliable and powerful database as a service by Heroku',
+      websiteUrl: 'https://www.heroku.com/postgres',
+      docsUrl: 'https://devcenter.heroku.com/articles/heroku-postgresql',
+      connectionFormat: 'postgresql://[user]:[password]@[host].compute-1.amazonaws.com:[port]/[dbname]',
+      exampleString: 'postgresql://user:password@ec2-12-345-67-890.compute-1.amazonaws.com:5432/d1a2b3c4d5',
+      steps: [
+        { title: 'Install CLI', description: 'Install Heroku CLI and login' },
+        { title: 'Create App', description: 'Run: heroku create your-app-name' },
+        { title: 'Add Postgres', description: 'Run: heroku addons:create heroku-postgresql:essential-0' },
+        { title: 'Get Credentials', description: 'Run: heroku config:get DATABASE_URL' }
       ],
-      tips: [
-        'Free tier: 750 hours/month for 12 months',
-        'Automated backups and snapshots',
-        'Multi-AZ for high availability',
-        'Monitor with CloudWatch'
-      ]
+      features: ['Continuous protection', 'Rollback', 'Dataclips', 'Fork & follow'],
+      freeTier: true
+    },
+    {
+      id: 'googlecloudsql',
+      name: 'Google Cloud SQL PostgreSQL',
+      logo: 'https://cdn.worldvectorlogo.com/logos/google-cloud-2.svg',
+      category: 'PostgreSQL',
+      description: 'Fully managed PostgreSQL database service on Google Cloud',
+      websiteUrl: 'https://cloud.google.com/sql',
+      docsUrl: 'https://cloud.google.com/sql/docs/postgres/connect-overview',
+      connectionFormat: 'postgresql://[user]:[password]@[public-ip]:[port]/[dbname]',
+      exampleString: 'postgresql://postgres:password@35.123.456.78:5432/mydb',
+      steps: [
+        { title: 'GCP Console', description: 'Go to Google Cloud Console → SQL' },
+        { title: 'Create Instance', description: 'Click "Create Instance" → Choose PostgreSQL' },
+        { title: 'Set Password', description: 'Configure instance and set postgres password' },
+        { title: 'Public IP', description: 'Enable public IP and add authorized networks' }
+      ],
+      features: ['Automatic replication', 'Point-in-time recovery', 'High availability', 'IAM integration'],
+      freeTier: false
+    },
+    {
+      id: 'azurepostgres',
+      name: 'Azure Database for PostgreSQL',
+      logo: 'https://cdn.worldvectorlogo.com/logos/azure-1.svg',
+      category: 'PostgreSQL',
+      description: 'Fully managed PostgreSQL database service by Microsoft Azure',
+      websiteUrl: 'https://azure.microsoft.com/en-us/products/postgresql',
+      docsUrl: 'https://learn.microsoft.com/en-us/azure/postgresql/',
+      connectionFormat: 'postgresql://[user]@[servername]:[password]@[servername].postgres.database.azure.com:[port]/[dbname]',
+      exampleString: 'postgresql://myadmin@myserver:password@myserver.postgres.database.azure.com:5432/postgres',
+      steps: [
+        { title: 'Azure Portal', description: 'Log in to Azure Portal' },
+        { title: 'Create Resource', description: 'Search "Azure Database for PostgreSQL" and create' },
+        { title: 'Configure Server', description: 'Set server name, admin username, password' },
+        { title: 'Connection Strings', description: 'Go to "Connection strings" in server settings' }
+      ],
+      features: ['Built-in HA', 'Automated backups', 'Advanced threat protection', 'Azure AD authentication'],
+      freeTier: false
+    },
+    {
+      id: 'digitaloceanpostgres',
+      name: 'DigitalOcean Managed PostgreSQL',
+      logo: 'https://www.vectorlogo.zone/logos/digitalocean/digitalocean-icon.svg',
+      category: 'PostgreSQL',
+      description: 'Scalable PostgreSQL database clusters on DigitalOcean',
+      websiteUrl: 'https://www.digitalocean.com/products/managed-databases-postgresql',
+      docsUrl: 'https://docs.digitalocean.com/products/databases/postgresql/',
+      connectionFormat: 'postgresql://[user]:[password]@[host]:[port]/[dbname]?sslmode=require',
+      exampleString: 'postgresql://doadmin:password@db-postgresql-nyc1-12345.ondigitalocean.com:25060/defaultdb?sslmode=require',
+      steps: [
+        { title: 'DigitalOcean Panel', description: 'Log in to DigitalOcean control panel' },
+        { title: 'Create Database', description: 'Click "Create" → "Databases" → PostgreSQL' },
+        { title: 'Choose Plan', description: 'Select cluster size and region' },
+        { title: 'Connection Details', description: 'Copy connection string from Overview tab' }
+      ],
+      features: ['Automatic failover', 'Daily backups', 'Connection pooling', 'Read replicas'],
+      freeTier: false
+    },
+    {
+      id: 'aivenpostgres',
+      name: 'Aiven for PostgreSQL',
+      logo: 'https://assets.topadvisor.com/media/_solution_logo_09222023_26755928.png',
+      category: 'PostgreSQL',
+      description: 'Multi-cloud managed PostgreSQL database service',
+      websiteUrl: 'https://aiven.io/postgresql',
+      docsUrl: 'https://docs.aiven.io/docs/products/postgresql',
+      connectionFormat: 'postgresql://[user]:[password]@[host]:[port]/[dbname]?sslmode=require',
+      exampleString: 'postgresql://avnadmin:password@pg-12345-myproject.aivencloud.com:12345/defaultdb?sslmode=require',
+      steps: [
+        { title: 'Aiven Console', description: 'Sign up and log in to console.aiven.io' },
+        { title: 'Create Service', description: 'Click "Create service" → Select PostgreSQL' },
+        { title: 'Choose Cloud', description: 'Select cloud provider and region' },
+        { title: 'Service URI', description: 'Copy Service URI from Overview page' }
+      ],
+      features: ['Multi-cloud', 'Advanced security', 'Automatic updates', 'Integrated extensions'],
+      freeTier: true
+    },
+    {
+      id: 'render',
+      name: 'Render PostgreSQL',
+      logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSlZQ5lkKr_NTo29xqy0X5VQSQknoPuhuu3A&s',
+      category: 'PostgreSQL',
+      description: 'Fully managed PostgreSQL databases on Render',
+      websiteUrl: 'https://render.com/docs/databases',
+      docsUrl: 'https://render.com/docs/postgresql',
+      connectionFormat: 'postgresql://[user]:[password]@[host]:[port]/[dbname]',
+      exampleString: 'postgresql://myuser:password@dpg-abc123-a.ohio-postgres.render.com:5432/mydb_abc',
+      steps: [
+        { title: 'Render Dashboard', description: 'Sign up and log in to dashboard.render.com' },
+        { title: 'New PostgreSQL', description: 'Click "New +" → "PostgreSQL"' },
+        { title: 'Configure Database', description: 'Set name, region, and plan' },
+        { title: 'Connection String', description: 'Copy "External Database URL" from Info tab' }
+      ],
+      features: ['Auto-scaling', 'Point-in-time recovery', 'Daily backups', 'Private networking'],
+      freeTier: true
+    },
+    {
+      id: 'cockroachdb',
+      name: 'CockroachDB',
+      logo: 'https://cdn.worldvectorlogo.com/logos/cockroachdb.svg',
+      category: 'PostgreSQL',
+      description: 'Distributed SQL database compatible with PostgreSQL',
+      websiteUrl: 'https://www.cockroachlabs.com',
+      docsUrl: 'https://www.cockroachlabs.com/docs/stable/connect-to-the-database',
+      connectionFormat: 'postgresql://[user]:[password]@[host]:[port]/[dbname]?sslmode=verify-full',
+      exampleString: 'postgresql://myuser:password@free-tier.gcp-us-central1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full',
+      steps: [
+        { title: 'CockroachDB Cloud', description: 'Sign up at cockroachlabs.cloud' },
+        { title: 'Create Cluster', description: 'Click "Create Cluster" and select plan' },
+        { title: 'Create SQL User', description: 'Add SQL user with password' },
+        { title: 'Connection String', description: 'Copy connection string from "Connect" modal' }
+      ],
+      features: ['Global distribution', 'Horizontal scaling', 'Built-in resilience', 'ACID transactions'],
+      freeTier: true
+    },
+    {
+      id: 'timescalecloud',
+      name: 'Timescale Cloud',
+      logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1QlKlW-KT-OZe6dffDTgSEf3abClfbRdtYA&s',
+      category: 'PostgreSQL',
+      description: 'Time-series PostgreSQL database optimized for fast ingest and queries',
+      websiteUrl: 'https://www.timescale.com',
+      docsUrl: 'https://docs.timescale.com/use-timescale/latest/connecting/',
+      connectionFormat: 'postgresql://[user]:[password]@[host]:[port]/[dbname]?sslmode=require',
+      exampleString: 'postgresql://tsdbadmin:password@abc123.tsdb.cloud.timescale.com:12345/tsdb?sslmode=require',
+      steps: [
+        { title: 'Timescale Console', description: 'Sign up at console.cloud.timescale.com' },
+        { title: 'Create Service', description: 'Click "Create service" and select region' },
+        { title: 'Configure Service', description: 'Choose compute and storage options' },
+        { title: 'Connection Info', description: 'Copy connection string from service overview' }
+      ],
+      features: ['Hypertables', 'Continuous aggregates', 'Compression', 'Time-series analytics'],
+      freeTier: true
+    },
+    {
+      id: 'planetscale',
+      name: 'PlanetScale',
+      logo: 'https://avatars.githubusercontent.com/u/35612527?s=200&v=4',
+      category: 'MySQL',
+      description: 'Serverless MySQL platform with branching and scaling',
+      websiteUrl: 'https://planetscale.com',
+      docsUrl: 'https://planetscale.com/docs/concepts/connection-strings',
+      connectionFormat: 'mysql://[user]:[password]@[host]/[database]?ssl={"rejectUnauthorized":true}',
+      exampleString: 'mysql://username:pscale_pw_password@aws.connect.psdb.cloud/mydb?ssl={"rejectUnauthorized":true}',
+      steps: [
+        { title: 'PlanetScale Account', description: 'Sign up at planetscale.com' },
+        { title: 'Create Database', description: 'Click "New database" and select region' },
+        { title: 'Create Password', description: 'Go to Settings → Passwords → New password' },
+        { title: 'Connection String', description: 'Copy connection string for your application' }
+      ],
+      features: ['Database branching', 'Schema migrations', 'Query insights', 'Horizontal sharding'],
+      freeTier: true
+    },
+    {
+      id: 'azuremysql',
+      name: 'Azure Database for MySQL',
+      logo: 'https://cdn.worldvectorlogo.com/logos/azure-1.svg',
+      category: 'MySQL',
+      description: 'Fully managed MySQL database service by Microsoft Azure',
+      websiteUrl: 'https://azure.microsoft.com/en-us/products/mysql',
+      docsUrl: 'https://learn.microsoft.com/en-us/azure/mysql/',
+      connectionFormat: 'mysql://[user]@[servername]:[password]@[servername].mysql.database.azure.com:[port]/[dbname]',
+      exampleString: 'mysql://myadmin@myserver:password@myserver.mysql.database.azure.com:3306/mydb',
+      steps: [
+        { title: 'Azure Portal', description: 'Log in to Azure Portal' },
+        { title: 'Create Resource', description: 'Search "Azure Database for MySQL" and create' },
+        { title: 'Configure Server', description: 'Set server name, admin username, password' },
+        { title: 'Connection Strings', description: 'Go to "Connection strings" in server settings' }
+      ],
+      features: ['Built-in HA', 'Automated backups', 'Advanced threat protection', 'Azure AD authentication'],
+      freeTier: false
+    },
+    {
+      id: 'googlecloudsqlmysql',
+      name: 'Google Cloud SQL MySQL',
+      logo: 'https://cdn.worldvectorlogo.com/logos/google-cloud-2.svg',
+      category: 'MySQL',
+      description: 'Fully managed MySQL database service on Google Cloud',
+      websiteUrl: 'https://cloud.google.com/sql',
+      docsUrl: 'https://cloud.google.com/sql/docs/mysql/connect-overview',
+      connectionFormat: 'mysql://[user]:[password]@[public-ip]:[port]/[dbname]',
+      exampleString: 'mysql://root:password@35.123.456.78:3306/mydb',
+      steps: [
+        { title: 'GCP Console', description: 'Go to Google Cloud Console → SQL' },
+        { title: 'Create Instance', description: 'Click "Create Instance" → Choose MySQL' },
+        { title: 'Set Password', description: 'Configure instance and set root password' },
+        { title: 'Public IP', description: 'Enable public IP and add authorized networks' }
+      ],
+      features: ['Automatic replication', 'Point-in-time recovery', 'High availability', 'IAM integration'],
+      freeTier: false
+    },
+    {
+      id: 'digitaloceanmysql',
+      name: 'DigitalOcean Managed MySQL',
+      logo: 'https://www.vectorlogo.zone/logos/digitalocean/digitalocean-icon.svg',
+      category: 'MySQL',
+      description: 'Scalable MySQL database clusters on DigitalOcean',
+      websiteUrl: 'https://www.digitalocean.com/products/managed-databases-mysql',
+      docsUrl: 'https://docs.digitalocean.com/products/databases/mysql/',
+      connectionFormat: 'mysql://[user]:[password]@[host]:[port]/[dbname]?ssl-mode=REQUIRED',
+      exampleString: 'mysql://doadmin:password@db-mysql-nyc1-12345.ondigitalocean.com:25060/defaultdb?ssl-mode=REQUIRED',
+      steps: [
+        { title: 'DigitalOcean Panel', description: 'Log in to DigitalOcean control panel' },
+        { title: 'Create Database', description: 'Click "Create" → "Databases" → MySQL' },
+        { title: 'Choose Plan', description: 'Select cluster size and region' },
+        { title: 'Connection Details', description: 'Copy connection string from Overview tab' }
+      ],
+      features: ['Automatic failover', 'Daily backups', 'Connection pooling', 'Read replicas'],
+      freeTier: false
+    },
+    {
+      id: 'aivenmysql',
+      name: 'Aiven for MySQL',
+      logo: 'https://assets.topadvisor.com/media/_solution_logo_09222023_26755928.png',
+      category: 'MySQL',
+      description: 'Multi-cloud managed MySQL database service',
+      websiteUrl: 'https://aiven.io/mysql',
+      docsUrl: 'https://docs.aiven.io/docs/products/mysql',
+      connectionFormat: 'mysql://[user]:[password]@[host]:[port]/[dbname]?ssl-mode=REQUIRED',
+      exampleString: 'mysql://avnadmin:password@mysql-12345-myproject.aivencloud.com:12345/defaultdb?ssl-mode=REQUIRED',
+      steps: [
+        { title: 'Aiven Console', description: 'Sign up and log in to console.aiven.io' },
+        { title: 'Create Service', description: 'Click "Create service" → Select MySQL' },
+        { title: 'Choose Cloud', description: 'Select cloud provider and region' },
+        { title: 'Service URI', description: 'Copy Service URI from Overview page' }
+      ],
+      features: ['Multi-cloud', 'Advanced security', 'Automatic updates', 'Integrated extensions'],
+      freeTier: true
+    },
+    {
+      id: 'auroramysql',
+      name: 'Amazon Aurora MySQL',
+      logo: 'https://cdn.worldvectorlogo.com/logos/aws-rds.svg',
+      category: 'MySQL',
+      description: 'MySQL-compatible relational database built for the cloud',
+      websiteUrl: 'https://aws.amazon.com/rds/aurora/',
+      docsUrl: 'https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.AuroraMySQL.html',
+      connectionFormat: 'mysql://[username]:[password]@[endpoint]:[port]/[dbname]',
+      exampleString: 'mysql://admin:password@myaurora.cluster-abc123.us-east-1.rds.amazonaws.com:3306/mydb',
+      steps: [
+        { title: 'AWS Console', description: 'Log in to AWS Console and go to RDS' },
+        { title: 'Create Database', description: 'Click "Create database" and select Amazon Aurora' },
+        { title: 'Choose MySQL', description: 'Select MySQL-compatible edition' },
+        { title: 'Connection Endpoint', description: 'Copy cluster endpoint from Connectivity section' }
+      ],
+      features: ['5x faster than MySQL', 'Auto-scaling storage', 'Multi-AZ', 'Read replicas'],
+      freeTier: true
     }
   ];
 
-  const [selectedDatabase, setSelectedDatabase] = useState(0);
+  const selectedProviderData = providers.find(p => p.id === selectedProvider);
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7] p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-8 py-12">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Database Setup Guide</h1>
-          <p className="text-lg text-gray-600">
-            Connect to PostgreSQL from any provider
-          </p>
+        <div className="mb-12">
+          <h1 className="text-3xl font-semibold text-gray-900 mb-2 tracking-tight">Connection Guides</h1>
+          <p className="text-base text-gray-500">Setup instructions for cloud database providers</p>
         </div>
 
-        {/* Database Provider Selection */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {databases.map((db, index) => (
-            <button
-              key={db.name}
-              onClick={() => setSelectedDatabase(index)}
-              className={`p-6 rounded-2xl border-2 transition-all text-left ${
-                selectedDatabase === index
-                  ? 'border-[#007AFF] bg-white shadow-lg scale-[1.02]'
-                  : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-md'
-              }`}
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <img src={db.logo} alt={db.name} className="w-12 h-12 object-contain" />
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900">{db.name}</h3>
+        <div className="grid lg:grid-cols-4 gap-8">
+          {/* Provider List */}
+          <div className="lg:col-span-1">
+            <div className="space-y-6">
+              {/* PostgreSQL Section */}
+              <div>
+                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">PostgreSQL</h3>
+                <div className="space-y-1">
+                  {providers.filter(p => p.category === 'PostgreSQL').map(provider => (
+                    <button
+                      key={provider.id}
+                      onClick={() => setSelectedProvider(provider.id)}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-left ${
+                        selectedProvider === provider.id
+                          ? 'bg-gray-100 text-gray-900'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      }`}
+                    >
+                      <img src={provider.logo} alt={provider.name} className="w-5 h-5 object-contain flex-shrink-0" />
+                      <span className="text-sm font-medium truncate">{provider.name}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
-              <p className="text-sm text-gray-600">{db.description}</p>
-            </button>
-          ))}
-        </div>
 
-        {/* Selected Database Details */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-          {/* Header */}
-          <div className={`p-6 bg-gradient-to-r ${databases[selectedDatabase].gradient}`}>
-            <div className="flex items-center gap-4">
-              <img src={databases[selectedDatabase].logo} alt={databases[selectedDatabase].name} className="w-16 h-16 object-contain bg-white rounded-xl p-2" />
+              {/* MySQL Section */}
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">{databases[selectedDatabase].name}</h2>
-                <p className="text-gray-700">{databases[selectedDatabase].description}</p>
+                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">MySQL</h3>
+                <div className="space-y-1">
+                  {providers.filter(p => p.category === 'MySQL').map(provider => (
+                    <button
+                      key={provider.id}
+                      onClick={() => setSelectedProvider(provider.id)}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-left ${
+                        selectedProvider === provider.id
+                          ? 'bg-gray-100 text-gray-900'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      }`}
+                    >
+                      <img src={provider.logo} alt={provider.name} className="w-5 h-5 object-contain flex-shrink-0" />
+                      <span className="text-sm font-medium truncate">{provider.name}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Content */}
-          <div className="p-6 space-y-8">
-            {/* Connection String Format */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <Database className="w-5 h-5" />
-                Connection String Format
-              </h3>
-              <div className="bg-gray-100 rounded-xl p-4 font-mono text-sm text-gray-800 break-all">
-                {databases[selectedDatabase].connectionString}
-              </div>
-            </div>
-
-            {/* Examples */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Examples</h3>
-              <div className="space-y-3">
-                {databases[selectedDatabase].examples.map((example, idx) => (
-                  <div key={idx} className="relative">
-                    <div className="text-sm font-medium text-gray-700 mb-2">{example.title}</div>
-                    <div className="bg-white border border-gray-300 rounded-xl p-4 pr-12 relative group shadow-inner">
-                      <code className="text-sm text-[#111111] break-all">{example.string}</code>
-                      <button
-                        onClick={() => handleCopy(example.string, idx)}
-                        className="absolute right-3 top-3 p-2 rounded-lg bg-[#F5F5F7] border border-gray-300 hover:bg-[#E5E5E7] transition-colors"
+          {/* Provider Details */}
+          {selectedProviderData && (
+            <div className="lg:col-span-3">
+              <div className="border border-gray-200 rounded-xl overflow-hidden">
+                {/* Provider Header */}
+                <div className="p-8 border-b border-gray-200 bg-white">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-4">
+                      <img 
+                        src={selectedProviderData.logo} 
+                        alt={selectedProviderData.name} 
+                        className="w-12 h-12 object-contain"
+                      />
+                      <div>
+                        <h2 className="text-2xl font-semibold text-gray-900 tracking-tight">{selectedProviderData.name}</h2>
+                        <div className="flex items-center gap-3 mt-1">
+                          <span className="text-xs text-gray-500">{selectedProviderData.category}</span>
+                          {selectedProviderData.freeTier && (
+                            <span className="text-xs text-green-600">Free tier available</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <a
+                        href={selectedProviderData.websiteUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
                       >
-                        {copiedIndex === idx ? (
-                          <Check className="w-4 h-4 text-[#007AFF]" />
-                        ) : (
-                          <Copy className="w-4 h-4 text-[#86868B]" />
-                        )}
-                      </button>
+                        <span>Website</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                      <span className="text-gray-300">|</span>
+                      <a
+                        href={selectedProviderData.docsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                      >
+                        <span>Docs</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
+                  <p className="text-sm text-gray-600 leading-relaxed">{selectedProviderData.description}</p>
+                </div>
 
-            {/* Setup Steps */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <Server className="w-5 h-5" />
-                Setup Steps
-              </h3>
-              <div className="space-y-4">
-                {databases[selectedDatabase].setup.map((step, idx) => (
-                  <div key={idx} className="border border-gray-200 rounded-xl p-5">
-                    <div className="flex items-start gap-3 mb-3">
-                      <div className="w-7 h-7 rounded-full bg-[#007AFF] text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
-                        {idx + 1}
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900">{step.step}</h4>
-                        <p className="text-sm text-gray-600 mt-1">{step.description}</p>
-                      </div>
+                <div className="p-8 bg-white space-y-8">
+                  {/* Features */}
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-900 mb-3">Features</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedProviderData.features.map((feature, idx) => (
+                        <span key={idx} className="text-sm text-gray-700 px-3 py-1.5 bg-gray-50 rounded-md border border-gray-200">
+                          {feature}
+                        </span>
+                      ))}
                     </div>
-                    <div className="space-y-2 ml-10">
-                      {step.commands.map((cmd, cmdIdx) => (
-                        <div key={cmdIdx} className="bg-white border border-gray-300 rounded-lg p-3 relative group shadow-inner">
-                          <pre className="text-sm text-[#111111] whitespace-pre-wrap">{cmd}</pre>
-                          <button
-                            onClick={() => handleCopy(cmd, 1000 + idx * 10 + cmdIdx)}
-                            className="absolute right-2 top-2 p-1.5 rounded bg-[#F5F5F7] border border-gray-300 hover:bg-[#E5E5E7] transition-colors opacity-0 group-hover:opacity-100"
-                          >
-                            {copiedIndex === 1000 + idx * 10 + cmdIdx ? (
-                              <Check className="w-3.5 h-3.5 text-[#007AFF]" />
-                            ) : (
-                              <Copy className="w-3.5 h-3.5 text-[#86868B]" />
-                            )}
-                          </button>
+                  </div>
+
+                  {/* Setup Steps */}
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-900 mb-4">Setup</h3>
+                    <div className="space-y-4">
+                      {selectedProviderData.steps.map((step, idx) => (
+                        <div key={idx} className="flex gap-4">
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-900 text-white text-xs flex items-center justify-center font-medium">
+                            {idx + 1}
+                          </span>
+                          <div className="flex-1 pt-0.5">
+                            <h4 className="text-sm font-medium text-gray-900">{step.title}</h4>
+                            <p className="text-sm text-gray-600 mt-0.5">{step.description}</p>
+                          </div>
                         </div>
                       ))}
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
 
-            {/* Tips */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <Shield className="w-5 h-5" />
-                Best Practices & Tips
-              </h3>
-              <div className="grid gap-3">
-                {databases[selectedDatabase].tips.map((tip, idx) => (
-                  <div key={idx} className="flex items-start gap-3 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                    <ChevronRight className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-blue-900">{tip}</p>
+                  {/* Connection String Format */}
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-900 mb-3">Connection String Format</h3>
+                    <div className="bg-white border border-gray-200 rounded-lg p-4 relative group">
+                      <pre className="text-xs text-gray-700 font-mono overflow-x-auto">{selectedProviderData.connectionFormat}</pre>
+                      <button
+                        onClick={() => handleCopy(selectedProviderData.connectionFormat)}
+                        className="absolute top-3 right-3 p-1.5 rounded-md bg-white border border-gray-200 hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100"
+                      >
+                        {copiedText === selectedProviderData.connectionFormat ? (
+                          <Check className="w-3.5 h-3.5 text-gray-900" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5 text-gray-600" />
+                        )}
+                      </button>
+                    </div>
                   </div>
-                ))}
+
+                  {/* Example Connection String */}
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-900 mb-3">Example</h3>
+                    <div className="bg-white border border-gray-200 rounded-lg p-4 relative group">
+                      <code className="text-xs text-gray-700 font-mono break-all block">{selectedProviderData.exampleString}</code>
+                      <button
+                        onClick={() => handleCopy(selectedProviderData.exampleString)}
+                        className="absolute top-3 right-3 p-1.5 rounded-md bg-white border border-gray-200 hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100"
+                      >
+                        {copiedText === selectedProviderData.exampleString ? (
+                          <Check className="w-3.5 h-3.5 text-gray-900" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5 text-gray-600" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

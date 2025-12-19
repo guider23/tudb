@@ -9,11 +9,13 @@ import {
   Search,
   HelpCircle,
   Bookmark,
+  Microscope,
 } from 'lucide-react';
 
 const generalNavigation = [
   { name: 'Queries', href: '/query', icon: MessageSquare },
   { name: 'Saved Queries', href: '/saved-queries', icon: Bookmark },
+  { name: 'Inspect', href: '/inspect', icon: Microscope },
   { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Connections', href: '/connections', icon: Database },
 ];
@@ -44,6 +46,7 @@ export default function Layout() {
     if (path === '/connections') return 'Connections Manager';
     if (path === '/query') return 'Query Interface';
     if (path === '/saved-queries') return 'Saved Queries';
+    if (path === '/inspect') return 'Database Inspector';
     if (path === '/settings') return 'Settings';
     return 'Dashboard';
   };
@@ -71,9 +74,9 @@ export default function Layout() {
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
-  // Close/hide sidebar
+  // Close window
   const handleClose = () => {
-    setIsSidebarCollapsed(true);
+    window.close();
   };
 
   return (
