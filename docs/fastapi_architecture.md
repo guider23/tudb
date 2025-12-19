@@ -2,7 +2,7 @@
 
 This document provides architectural guidance for implementing TUDB using Python with FastAPI instead of Node.js/TypeScript. The core concepts remain the same, but with Python-specific implementations.
 
-## 📋 Overview
+##  Overview
 
 The FastAPI implementation follows the same architecture as the TypeScript version:
 - **Backend API**: FastAPI with async endpoints
@@ -12,7 +12,7 @@ The FastAPI implementation follows the same architecture as the TypeScript versi
 - **SQL Validation**: Python-based safety validator
 - **Audit Logging**: Async database logging
 
-## 🏗️ Project Structure
+##  Project Structure
 
 ```
 tudb-python/
@@ -75,7 +75,7 @@ tudb-python/
 └── README.md
 ```
 
-## 🔧 Core Components
+##  Core Components
 
 ### 1. FastAPI Backend (`backend/app/main.py`)
 
@@ -606,7 +606,7 @@ class BedrockClient:
         pass
 ```
 
-## 📦 Dependencies
+##  Dependencies
 
 ### Backend (`backend/requirements.txt`)
 
@@ -631,7 +631,7 @@ asyncpg==0.29.0
 python-dotenv==1.0.0
 ```
 
-## 🐳 Docker Configuration
+## Docker Configuration
 
 ### Dockerfile
 
@@ -658,7 +658,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
 CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
-## 🚀 Running the Application
+##  Running the Application
 
 ```bash
 # Install dependencies
@@ -677,7 +677,7 @@ uvicorn backend.app.main:app --reload --port 8000
 uvicorn mcp_tool_server.app.server:app --reload --port 8001
 ```
 
-## 🧪 Testing with pytest
+##  Testing with pytest
 
 ```python
 # tests/test_sql_validator.py
@@ -703,7 +703,7 @@ def test_block_drop_statement(validator):
     assert "DROP" in result.error
 ```
 
-## 📝 Key Differences from TypeScript
+##  Key Differences from TypeScript
 
 1. **Async/Await**: Use `async`/`await` throughout with `asyncpg`
 2. **Type Hints**: Use Python type hints instead of TypeScript types
@@ -713,7 +713,7 @@ def test_block_drop_statement(validator):
 6. **asyncpg**: Use asyncpg for async PostgreSQL instead of pg
 7. **pytest**: Use pytest for testing instead of Jest
 
-## 🔗 Additional Resources
+## Additional Resources
 
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [asyncpg Documentation](https://magicstack.github.io/asyncpg/)
