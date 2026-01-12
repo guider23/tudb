@@ -6,7 +6,7 @@
 
 Convert plain English to SQL queries across PostgreSQL, MySQL, RDS, Supabase, Neon, and Railway using AI-powered natural language processing.
 
-[![Live](https://img.shields.io/badge/Live%20Demo-tudb.bcworks.in.net-blue?style=for-the-badge)](https://tudb.bcworks.in.net)
+[![Live](https://img.shields.io/badge/Live%20-tudb.bcworks.in.net-blue?style=for-the-badge)](https://tudb.bcworks.in.net)
 
 
 
