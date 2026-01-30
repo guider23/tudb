@@ -97,7 +97,3 @@ npm start
 ```
 
 Set environment variables in production.
-
-## License
-
-ISC
