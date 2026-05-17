@@ -97,3 +97,5 @@ npm start
 ```
 
 Set environment variables in production.
+
+The codebase comments were enhanced by Gemma.
